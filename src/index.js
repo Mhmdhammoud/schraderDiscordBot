@@ -21,7 +21,7 @@ const getUserFromMention = (mention) => {
 	if (mention.startsWith('<@') && mention.endsWith('>')) {
 		mention = mention.slice(2, -1);
 
-		if (mention.startsWith('!')) {
+		if (mention.startsWith(`${prefix}`)) {
 			mention = mention.slice(1);
 		}
 
@@ -32,10 +32,10 @@ const getUserFromMention = (mention) => {
 client.on('message', (message) => {
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
 	if (message.content.startsWith(`${prefix}server`)) {
-		message.channel
+		return message.channel
 			.send(
-				`The server name is ${message.guild.name}
-			\n Total number of members is ${message.guild.memberCount}
+				`Server name: ${message.guild.name}
+			\n Total number of members: ${message.guild.memberCount}
 			\n Server region: ${message.guild.region} 
 			\n Created at: ${message.guild.createdAt}`
 			)
@@ -55,9 +55,7 @@ client.on('message', (message) => {
 	const command = args.shift().toLowerCase();
 
 	if (!args.length) {
-		return message.channel.send(
-			`You didn't provide any arguments, ${message.author}!`
-		);
+		return message.reply(`You didn't provide any arguments, ${message.author}!`);
 	} else if (command === 'warn') {
 		if (!message.mentions.users.size) {
 			return message.reply('you need to tag a user in order to warn them!');
