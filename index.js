@@ -3,7 +3,7 @@
 
 const Discord = require('discord.js');
 
-const { prefix, token } = require('./config.json');
+const { prefix } = require('./config.json');
 
 const ytdl = require('ytdl-core');
 
@@ -27,7 +27,7 @@ client.once('ready', () => {
 
 // login to Discord witprh your app's toke\n
 let servers = {};
-client.login(token);
+client.login(process.env.TOKEN);
 
 const getUserFromMention = (mention) => {
 	if (!mention) return;
