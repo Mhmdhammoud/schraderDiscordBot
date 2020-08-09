@@ -5,6 +5,8 @@ const Discord = require('discord.js');
 
 const { prefix, token } = require('./config.json');
 
+const ytdl = require('ytdl-core');
+
 // create a new Discord client
 
 const client = new Discord.Client();
@@ -24,7 +26,7 @@ client.once('ready', () => {
 });
 
 // login to Discord witprh your app's toke\n
-
+let servers = {};
 client.login(token);
 
 const getUserFromMention = (mention) => {
@@ -119,6 +121,41 @@ client.on('message', (message) => {
 		} else {
 			message.reply(`User Created At ${message.mentions.users[0]}`);
 			console.log(user.id);
+		}
+	} else if (command === 'lorem') {
+		return message.reply(
+			'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nostrum rerum aut architecto itaque inventore labore distinctio optio, eos minima possimus pariatur voluptatem minus, dolor nesciunt quasi molestias aliquid? Eveniet, vitae'
+		);
+	} else if (command === 'play') {
+		const play = (connection, message) => {
+			let server = servers[message.guild.id];
+			server.dispatcher = connection.play(
+				ytdl(args[0], {
+					filter: 'audioonly',
+				})
+			);
+
+			server.queue.shift();
+			server.dispatcher.on('end', () => {
+				if (server.queue[0]) {
+					play(connection, message);
+				} else {
+					connection.disconnect();
+				}
+			});
+		};
+		if (!message.member.voice.channel) {
+			return message.reply('You must be in a channel to play the bot');
+		}
+		if (!servers[message.guild.id]) {
+			servers[message.guild.id] = { queue: [] };
+		}
+		let server = servers[message.guild.id];
+
+		if (!message.member.voice.connection) {
+			message.member.voice.channel.join().then((connection) => {
+				play(connection, message);
+			});
 		}
 	}
 });
