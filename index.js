@@ -11,12 +11,6 @@ const ytdl = require('ytdl-core');
 
 const client = new Discord.Client();
 
-const firstBatchCommands = require('./command/test');
-
-client.commands = new Discord.Collection();
-
-client.commands.set(firstBatchCommands.name, firstBatchCommands);
-
 // when the client is ready, run this code
 
 // this event will only trigger one time after logging in
