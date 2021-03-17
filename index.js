@@ -2,7 +2,7 @@
 // require the discord.js module
 
 const Discord = require('discord.js');
-
+require('dotenv').config({ path: './.env' });
 const { prefix } = require('./config.json');
 
 const ytdl = require('ytdl-core');
@@ -22,7 +22,6 @@ client.once('ready', () => {
 // login to Discord witprh your app's toke\n
 let servers = {};
 client.login(process.env.TOKEN);
-
 const getUserFromMention = (mention) => {
 	if (!mention) return;
 
@@ -128,7 +127,6 @@ client.on('message', (message) => {
 					filter: 'audioonly',
 				})
 			);
-
 			server.queue.shift();
 			server.dispatcher.on('end', () => {
 				if (server.queue[0]) {
